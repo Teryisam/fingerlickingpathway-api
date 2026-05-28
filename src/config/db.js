@@ -16,4 +16,14 @@ const pool = new Pool({
   },
 });
 
+// TEST CONNECTION
+pool.connect()
+  .then((client) => {
+    console.log("PostgreSQL connected successfully");
+    client.release();
+  })
+  .catch((err) => {
+    console.error("PostgreSQL connection error:", err);
+  });
+
 export const db = drizzle(pool, { schema });
