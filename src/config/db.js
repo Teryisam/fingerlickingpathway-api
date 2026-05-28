@@ -1,5 +1,7 @@
 // import { drizzle } from "drizzle-orm/neon-http";
 // import { neon } from "@neondatabase/serverless";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
 const { Pool } = pkg;
@@ -11,9 +13,10 @@ import * as schema from "../db/schema.js";
 
 const pool = new Pool({
   connectionString: ENV.DATABASE_URL, // Must be a postgres:// URL
-  ssl: {
-    rejectUnauthorized: false, // if your Aiven DB requires SSL
-  },
+  ssl: true,
+  // ssl: {
+  //   rejectUnauthorized: false, // if your Aiven DB requires SSL
+  // },
 });
 
 // TEST CONNECTION
