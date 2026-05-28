@@ -8,7 +8,7 @@ import { and, eq } from "drizzle-orm";
 const app = express();
 const PORT = ENV.PORT || 5005;
 
-if (ENV.NODE_ENV === "production") job.start();
+// if (ENV.NODE_ENV === "production") job.start();
 
 app.use(express.json());
 
