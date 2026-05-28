@@ -8,7 +8,7 @@ import { and, eq } from "drizzle-orm";
 const app = express();
 const PORT = ENV.PORT || 5005;
 
-// if (ENV.NODE_ENV === "production") job.start();
+if (ENV.NODE_ENV === "production") job.start();
 
 app.use(express.json());
 
@@ -39,6 +39,39 @@ app.post("/api/favorites", async (req, res) => {
     res.status(201).json(newFavorite[0]);
   } catch (error) {
     console.log("Error adding favorite", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.get("/api/favorites/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const userFavorites = await db
+      .select()
+      .from(favoritesTable)
+      .where(eq(favoritesTable.userId, userId));
+
+    res.status(200).json(userFavorites);
+  } catch (error) {
+    console.log("Error fetching the favorites", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.delete("/api/favorites/:userId/:recipeId", async (req, res) => {
+  try {
+    const { userId, recipeId } = req.params;
+
+    await db
+      .delete(favoritesTable)
+      .where(
+        and(eq(favoritesTable.userId, userId), eq(favoritesTable.recipeId, parseInt(recipeId)))
+      );
+
+    res.status(200).json({ message: "Favorite removed successfully" });
+  } catch (error) {
+    console.log("Error removing a favorite", error);
     res.status(500).json({ error: "Something went wrong" });
   }
 });
